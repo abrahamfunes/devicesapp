@@ -21,6 +21,7 @@ Route::get('api/v1/{model_name}', function ($model_name) {
     })->first();
 
     $faqs = [];
+    $devices = null;
 
     if ($device) {
 
@@ -43,14 +44,31 @@ Route::get('api/v1/{model_name}', function ($model_name) {
 
         $gallery = [];
 
+
         array_push(
             $gallery,
             $device->productsGallery()->get()->map(function ($item) {
                 return [
-                    'image' => "https://lanix.com/".$item->path,
+                    ['image' => "https://lanix.com/".$item->path],
                 ];
             })
         );
+
+        $gallery = array(
+            ['image' =>  "https://lanix.com/mobileapp/galeria/a.png"],
+            ['image' =>  "https://lanix.com/mobileapp/galeria/b.png"],
+            ['image' =>  "https://lanix.com/mobileapp/galeria/c.png"],
+        );
+
+        #$gallery[0][2] = ['image' =>  "https://lanix.com/mobileapp/galeria/a.png"];
+//        array_push(
+//            $gallery[0],
+//            ['image' =>  "https://lanix.com/mobileapp/galeria/b.png"]
+//        );
+//        array_push(
+//            $gallery[0],
+//            ['image' =>  "https://lanix.com/mobileapp/galeria/c.png"]
+//        );
 
         $device = [
             'model' => $device->model->name,
@@ -65,13 +83,18 @@ Route::get('api/v1/{model_name}', function ($model_name) {
             ['question' => 'Pregunta 2', 'answer' => 'Respuesta 2'],
         ];
 
+    }else{
+        $devices = \App\Models\Model::whereStatusId(1)->whereTypeId(3)->orderBy('name')->get()->pluck('name');
     }
 
     $data = [
         'device' => $device,
+        'avalibledevices' => $devices,
         'slider' => [
-            ["name" => "Slider 1", "image" => "http://slider1.jpg", "url" => "http://abrir-esta-liga-en-navegador-1",],
-            ["name" => "Slider 2", "image" => "http://slider2.jpg", "url" => "http://abrir-esta-liga-en-navegador-2",],
+            ["name" => "Lanix Mobile", "image" => 'https://lanix.com/mobileapp/slider/1.jpg', "url" => "",],
+            ["name" => "Laptops poderosas", "image" => 'https://lanix.com/mobileapp/slider/2.jpg', "url" => "",],
+            ["name" => "Velocidad de procesamiento", "image" => 'https://lanix.com/mobileapp/slider/3.jpg', "url" => "",],
+            ["name" => "Lo mejor del mercado", "image" => 'https://lanix.com/mobileapp/slider/4.jpg', "url" => "",],
         ],
         'faqs' => [
             'general' => [
@@ -82,6 +105,18 @@ Route::get('api/v1/{model_name}', function ($model_name) {
         ],
     ];
 
-    return response()->json($data);
+    $responsecode = 200;
+
+    $header = array (
+        'Content-Type' => 'application/json; charset=UTF-8',
+        'charset' => 'utf-8'
+    );
+
+    json_encode($data, JSON_UNESCAPED_SLASHES);
+
+    $response = response()->json($data , $responsecode, $header, JSON_UNESCAPED_UNICODE);
+    #$response->header('Content-Type', 'application/json');
+    #$response->header('charset', 'utf-8');
+    return $response;
 });
 
