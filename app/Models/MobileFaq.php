@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Eloquent as Model;
+use Illuminate\Database\Eloquent\Model as BaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @package App\Models
  * @version September 11, 2017, 5:13 pm UTC
  */
-class MobileFaq extends Model
+class MobileFaq extends BaseModel
 {
     #use SoftDeletes;
 
@@ -60,16 +60,4 @@ class MobileFaq extends Model
         return $this->belongsTo(\App\Models\Model::class);
     }
 
-    public static function boot()
-    {
-        static::created(function ($model) {
-            \DB::connection('mysql_app')->insert('insert into mobile_faqs (id, model_id, question, answer) values (?, ?, ?, ?)', [$model->id, $model->model_id, $model->question, $model->answer]);
-        });
-
-        static::updated(function ($model) {
-            \DB::connection('mysql_app')->update('update mobile_faqs SET model_id = ?, question = ?, answer = ?, status_id = ? WHERE id = ?', [$model->model_id, $model->question, $model->answer, $model->status_id, $model->id]);
-        });
-
-        parent::boot();
-    }
 }

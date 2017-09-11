@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model as BaseModel;
 
 /**
  * Class MobileModelRelation
  * @package App\Models
  * @version September 11, 2017, 7:21 pm UTC
  */
-class MobileModelRelation extends Model
+class MobileModelRelation extends BaseModel
 {
     #use SoftDeletes;
 
@@ -58,16 +58,4 @@ class MobileModelRelation extends Model
         return $this->belongsTo(\App\Models\Model::class);
     }
 
-    public static function boot()
-    {
-        static::created(function ($model) {
-            \DB::connection('mysql_app')->insert('insert into mobile_models_relations (id, model_id, model_name) values (?, ?, ?)', [$model->id, $model->model_id, $model->model_name]);
-        });
-
-        static::updated(function ($model) {
-            \DB::connection('mysql_app')->update('update mobile_models_relations SET model_id = ?, model_name = ?, status_id = ? WHERE id = ?', [$model->model_id, $model->model_name, $model->status_id, $model->id]);
-        });
-
-        parent::boot();
-    }
 }

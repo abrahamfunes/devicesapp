@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Eloquent as Model;
+use Illuminate\Database\Eloquent\Model as BaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @package App\Models
  * @version September 11, 2017, 5:14 pm UTC
  */
-class MobileSlider extends Model
+class MobileSlider extends BaseModel
 {
     #use SoftDeletes;
 
@@ -62,16 +62,4 @@ class MobileSlider extends Model
         return $this->belongsTo(\App\Models\Model::class);
     }
 
-    public static function boot()
-    {
-        static::created(function ($model) {
-            \DB::connection('mysql_app')->insert('insert into mobile_slider (id, model_id, name, url, image) values (?, ?, ?, ?)', [$model->id, $model->model_id, $model->question, $model->answer]);
-        });
-
-        static::updated(function ($model) {
-            \DB::connection('mysql_app')->update('update mobile_slider SET model_id = ?, name = ?, url = ?, image = ?, status_id = ? WHERE id = ?', [$model->model_id, $model->question, $model->answer, $model->status_id, $model->id]);
-        });
-
-        parent::boot();
-    }
 }
