@@ -10,13 +10,12 @@ use Illuminate\Database\Eloquent\Model as BaseModel;
  * @package App\Models
  * @version October 31, 2016, 6:31 am UTC
  */
-class Product extends BaseModel
-{
+class Product extends BaseModel {
 
     public $timestamps = false;
 
     public $table = 'products';
-    
+
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
@@ -37,7 +36,7 @@ class Product extends BaseModel
         'description1',
         'description2',
         'total',
-        'showinhome'
+        'showinhome',
     ];
 
     /**
@@ -46,19 +45,19 @@ class Product extends BaseModel
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
-        'user_id' => 'integer',
-        'range_id' => 'integer',
-        'model_id' => 'integer',
+        'id'                  => 'integer',
+        'user_id'             => 'integer',
+        'range_id'            => 'integer',
+        'model_id'            => 'integer',
         'operating_system_id' => 'integer',
-        'warantee_id' => 'integer',
-        'country_id' => 'integer',
-        'processor' => 'string',
-        'memory' => 'string',
-        'storage' => 'string',
-        'description1' => 'string',
-        'description2' => 'string',
-        'status_id' => 'integer'
+        'warantee_id'         => 'integer',
+        'country_id'          => 'integer',
+        'processor'           => 'string',
+        'memory'              => 'string',
+        'storage'             => 'string',
+        'description1'        => 'string',
+        'description2'        => 'string',
+        'status_id'           => 'integer',
     ];
 
     /**
@@ -67,9 +66,8 @@ class Product extends BaseModel
      * @var array
      */
     public static $rules = [
-        
-    ];
 
+    ];
 
 
     public function model()
@@ -96,9 +94,5 @@ class Product extends BaseModel
     {
         return $this->hasMany(File::class, 'reference_id')->where(['reference_type' => 'product', 'status_id' => 1, 'category_id' => 3]);
     }
-
-
-
-
 
 }
